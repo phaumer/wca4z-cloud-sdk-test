@@ -1,0 +1,21 @@
+{
+  "name": "wca4z-cloud-sdk-test",
+  "version": "1.0.0",
+  "description": "Small script to test Cloud SDK and the WCA4Z APIs",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "test": "npm run build && node dist/index.js"
+  },
+  "author": "IBM",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "ibm-cloud-sdk-core": "^4.2.4"
+  },
+  "devDependencies": {
+    "@types/node": "18.x",
+    "@types/extend": "^3.0.4",
+    "typescript": "^5.2.2"
+  }
+}
