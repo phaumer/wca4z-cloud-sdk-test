@@ -1,6 +1,8 @@
 # IBM watsonx Code Assistant for Z Cloud SDK test script
 
-Run by
+- Modify the [index.ts](./src/index.ts) file with your api-key and the proxy information.
+- Install nodejs 18 and npm 9.8 (or similar versions)
+- Run with
 
 ```bash
 export DEBUG=ibm-cloud-sdk-core*
