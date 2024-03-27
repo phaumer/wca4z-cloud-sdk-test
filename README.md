@@ -8,4 +8,5 @@ npm install
 npm run test
 ```
 
-See <https://github.com/IBM/node-sdk-core/blob/main/README.md> and <https://github.com/IBM/ibm-cloud-sdk-common?tab=readme-ov-file#proxy>
+- See this doc page to learn more about Cloud SDK: <https://github.com/IBM/node-sdk-core/blob/main/README.md>
+- See this section <https://github.com/watson-developer-cloud/node-sdk?tab=readme-ov-file#configuring-the-https-agent> for how to use the SDK with a proxy.

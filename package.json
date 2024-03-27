@@ -11,11 +11,13 @@
   "author": "IBM",
   "license": "Apache-2.0",
   "dependencies": {
-    "ibm-cloud-sdk-core": "^4.2.4"
+    "ibm-cloud-sdk-core": "^4.2.4",
+    "tunnel": "^0.0.6"
   },
   "devDependencies": {
     "@types/node": "18.x",
     "@types/extend": "^3.0.4",
+    "@types/tunnel": "^0.0.7",
     "typescript": "^5.2.2"
   }
 }
