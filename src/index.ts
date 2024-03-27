@@ -8,7 +8,7 @@
  *
  */
 
-import extend from 'extend';
+import extend from "extend";
 import { BaseService, IamAuthenticator } from "ibm-cloud-sdk-core";
 
 const apiKey = "<your-api-key>";
@@ -49,6 +49,9 @@ const plainTestRequest = new TestRequest({
   validateStatus: () => true,
 });
 
-const plainResult = await plainTestRequest.getProjects();
-console.log(`Results: ${JSON.stringify(plainResult)}`);
-
+try {
+  const plainResult = await plainTestRequest.getProjects();
+  console.log(`Results: ${JSON.stringify(plainResult)}`);
+} catch (error) {
+  console.log(`Running the request failed with ${error}`);
+}
