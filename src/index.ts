@@ -9,15 +9,14 @@
  */
 
 import extend from "extend";
-import tunnel from "tunnel";
 import { BaseService, IamAuthenticator } from "ibm-cloud-sdk-core";
 
 const apiKey = "<your-api-key>";
 const watsonxIamAuthUrl = new URL("https://iam.cloud.ibm.com/identity/token");
 const watsonxEndpointUrl = new URL("https://api.dataplatform.cloud.ibm.com");
 
-const proxyHost = "some.host.org";
-const proxyPort = 1234;
+const proxyHost = "<your-proxy.company.com>";
+const proxyPort = 3128;
 
 class TestRequest extends BaseService {
   public async getProjects(): Promise<any> {
@@ -55,27 +54,25 @@ const plainTestRequest = new TestRequest({
 
 try {
   const plainResult = await plainTestRequest.getProjects();
-  console.log(`WCA4Z Test SUCCESS. Results: ${JSON.stringify(plainResult)}`);
+  console.log(
+    `WCA4Z Test SUCCESS. Plain results: ${JSON.stringify(plainResult)}`
+  );
 } catch (error) {
   console.log(
-    `WCA4Z Test ERROR: Running the request without a tunnel failed with ${error}`
+    `WCA4Z Test ERROR: Running the request without a proxy failed with ${error}`
   );
 }
 
-const tunnelAgent = tunnel.httpsOverHttp({
+const proxyAuthenticator = new IamAuthenticator({
+  apikey: apiKey,
   proxy: {
-    host: proxyHost,
+    protocol: "http",
+    hostname: proxyHost,
     port: proxyPort,
   },
 });
 
-const proxyAuthenticator = new IamAuthenticator({
-  tunnelAgent,
-  apikey: apiKey,
-  proxy: false,
-});
-
-const tunnelTestRequest = new TestRequest({
+const proxyTestRequest = new TestRequest({
   headers: {
     "user-agent": "ibm.zopeneditor/4.0.0",
   },
@@ -84,13 +81,18 @@ const tunnelTestRequest = new TestRequest({
   jar: true,
   timeout: 120000,
   validateStatus: () => true,
-  tunnelAgent,
-  proxy: false,
+  proxy: {
+    protocol: "http",
+    hostname: proxyHost,
+    port: proxyPort,
+  },
 });
 
 try {
-  const tunneledResult = await tunnelTestRequest.getProjects();
-  console.log(`WCA4Z Test SUCCESS. Results: ${JSON.stringify(tunneledResult)}`);
+  const proxyResult = await proxyTestRequest.getProjects();
+  console.log(
+    `WCA4Z Test SUCCESS. Proxy request results: ${JSON.stringify(proxyResult)}`
+  );
 } catch (error) {
-  console.log(`WCA4Z Test ERROR: Tunneling request failed with ${error}`);
+  console.log(`WCA4Z Test ERROR: Proxy request failed with ${error}`);
 }
