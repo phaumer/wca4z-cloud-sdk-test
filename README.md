@@ -10,6 +10,12 @@ npm install
 npm run test
 ```
 
-- Depending on how your proxy is configure try changing `http` to `https` in the proxy headers.
+- Depending on how your proxy is configured try changing `http` to `https` in the `proxyProtocol` variable.
 - See this doc page to learn more about Cloud SDK: <https://github.com/IBM/node-sdk-core/blob/main/README.md>
 - See this section <https://github.com/axios/axios?tab=readme-ov-file#request-config> for how to use the SDK with a proxy.
+
+To run the Axios example replace the placeholder variables and
+
+```bash
+npm run axios
+```

@@ -10,11 +10,13 @@
 
 import extend from "extend";
 import { BaseService, IamAuthenticator } from "ibm-cloud-sdk-core";
+import { HttpsProxyAgent } from "https-proxy-agent";
 
 const apiKey = "<your-api-key>";
 const watsonxIamAuthUrl = new URL("https://iam.cloud.ibm.com/identity/token");
 const watsonxEndpointUrl = new URL("https://api.dataplatform.cloud.ibm.com");
 
+const proxyProtocol = "http";
 const proxyHost = "<your-proxy.company.com>";
 const proxyPort = 3128;
 
@@ -36,40 +38,14 @@ class TestRequest extends BaseService {
   }
 }
 
-const authenticator = new IamAuthenticator({
-  url: watsonxIamAuthUrl.href,
-  apikey: apiKey,
-});
-
-const plainTestRequest = new TestRequest({
-  headers: {
-    "user-agent": "ibm.zopeneditor/4.0.0",
-  },
-  serviceUrl: watsonxEndpointUrl.href,
-  authenticator: authenticator,
-  jar: true,
-  timeout: 120000,
-  validateStatus: () => true,
-});
-
-try {
-  const plainResult = await plainTestRequest.getProjects();
-  console.log(
-    `WCA4Z Test SUCCESS. Plain results: ${JSON.stringify(plainResult)}`
-  );
-} catch (error) {
-  console.log(
-    `WCA4Z Test ERROR: Running the request without a proxy failed with ${error}`
-  );
-}
+const httpsProxyAgent = new HttpsProxyAgent(
+  `${proxyProtocol}://${proxyHost}:${proxyPort}`
+);
 
 const proxyAuthenticator = new IamAuthenticator({
+  url: watsonxIamAuthUrl.toString(),
+  httpsAgent: httpsProxyAgent,
   apikey: apiKey,
-  proxy: {
-    protocol: "http",
-    hostname: proxyHost,
-    port: proxyPort,
-  },
 });
 
 const proxyTestRequest = new TestRequest({
@@ -81,11 +57,7 @@ const proxyTestRequest = new TestRequest({
   jar: true,
   timeout: 120000,
   validateStatus: () => true,
-  proxy: {
-    protocol: "http",
-    hostname: proxyHost,
-    port: proxyPort,
-  },
+  httpsAgent: httpsProxyAgent,
 });
 
 try {

@@ -6,12 +6,14 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "test": "npm run build && node dist/index.js"
+    "test": "npm run build && node dist/index.js",
+    "axios": "npm run build && node dist/axios.js"
   },
   "author": "IBM",
   "license": "Apache-2.0",
   "dependencies": {
-    "ibm-cloud-sdk-core": "^4.2.4"
+    "ibm-cloud-sdk-core": "^4.2.4",
+    "https-proxy-agent": "^7.0.4"
   },
   "devDependencies": {
     "@types/node": "18.x",
