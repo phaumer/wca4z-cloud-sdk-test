@@ -12,13 +12,13 @@ import extend from "extend";
 import { BaseService, IamAuthenticator } from "ibm-cloud-sdk-core";
 import { HttpsProxyAgent } from "https-proxy-agent";
 
-const apiKey = "<your-api-key>";
-const watsonxIamAuthUrl = "https://iam.cloud.ibm.com/identity/token";
+const apikey = "<your-api-key>";
 const watsonxEndpointUrl = "https://api.dataplatform.cloud.ibm.com";
 
 const proxyProtocol = "http";
 const proxyHost = "<your-proxy.company.com>";
 const proxyPort = 3128;
+const proxyEnabled = true;
 
 class TestRequest extends BaseService {
   public async getProjects(): Promise<any> {
@@ -42,10 +42,17 @@ const httpsProxyAgent = new HttpsProxyAgent(
   `${proxyProtocol}://${proxyHost}:${proxyPort}`
 );
 
-const proxyAuthenticator = new IamAuthenticator({
-  url: watsonxIamAuthUrl,
-  httpsAgent: httpsProxyAgent,
-  apikey: apiKey,
+const httpsAgentProperty = extend(
+  {},
+  {
+    httpsAgent: proxyEnabled ? httpsProxyAgent : undefined,
+  }
+);
+
+const authenticator = new IamAuthenticator({
+  ...httpsAgentProperty,
+  apikey,
+  disableSslVerification: true,
 });
 
 const proxyTestRequest = new TestRequest({
@@ -53,11 +60,12 @@ const proxyTestRequest = new TestRequest({
     "user-agent": "ibm.zopeneditor/4.0.0",
   },
   serviceUrl: watsonxEndpointUrl,
-  authenticator: proxyAuthenticator,
+  authenticator: authenticator,
+  ...httpsAgentProperty,
+  disableSslVerification: true,
   jar: true,
   timeout: 120000,
   validateStatus: () => true,
-  httpsAgent: httpsProxyAgent,
 });
 
 try {
