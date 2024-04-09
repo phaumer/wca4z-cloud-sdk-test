@@ -13,8 +13,8 @@ import { BaseService, IamAuthenticator } from "ibm-cloud-sdk-core";
 import { HttpsProxyAgent } from "https-proxy-agent";
 
 const apiKey = "<your-api-key>";
-const watsonxIamAuthUrl = new URL("https://iam.cloud.ibm.com/identity/token");
-const watsonxEndpointUrl = new URL("https://api.dataplatform.cloud.ibm.com");
+const watsonxIamAuthUrl = "https://iam.cloud.ibm.com/identity/token";
+const watsonxEndpointUrl = "https://api.dataplatform.cloud.ibm.com";
 
 const proxyProtocol = "http";
 const proxyHost = "<your-proxy.company.com>";
@@ -43,7 +43,7 @@ const httpsProxyAgent = new HttpsProxyAgent(
 );
 
 const proxyAuthenticator = new IamAuthenticator({
-  url: watsonxIamAuthUrl.toString(),
+  url: watsonxIamAuthUrl,
   httpsAgent: httpsProxyAgent,
   apikey: apiKey,
 });
@@ -52,7 +52,7 @@ const proxyTestRequest = new TestRequest({
   headers: {
     "user-agent": "ibm.zopeneditor/4.0.0",
   },
-  serviceUrl: watsonxEndpointUrl.href,
+  serviceUrl: watsonxEndpointUrl,
   authenticator: proxyAuthenticator,
   jar: true,
   timeout: 120000,
