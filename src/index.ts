@@ -46,6 +46,7 @@ const httpsAgentProperty = extend(
   {},
   {
     httpsAgent: proxyEnabled ? httpsProxyAgent : undefined,
+    proxy: proxyEnabled ? false : undefined,
   }
 );
 
