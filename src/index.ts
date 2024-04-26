@@ -10,14 +10,16 @@
 
 import extend from "extend";
 import { BaseService, IamAuthenticator } from "ibm-cloud-sdk-core";
-import { HttpsProxyAgent } from "https-proxy-agent";
+import { HttpsProxyAgent, HttpsProxyAgentOptions } from "https-proxy-agent";
 
 const apikey = "<your-api-key>";
 const watsonxEndpointUrl = "https://api.dataplatform.cloud.ibm.com";
+const iamUrl = "https://iam.cloud.ibm.com";
 
 const proxyProtocol = "http";
 const proxyHost = "<your-proxy.company.com>";
 const proxyPort = 3128;
+const proxyAuthorizationHeader = "Basic <base64-username:password>";
 const proxyEnabled = true;
 
 class TestRequest extends BaseService {
@@ -38,8 +40,15 @@ class TestRequest extends BaseService {
   }
 }
 
+const proxyAgentOptions = proxyAuthorizationHeader
+  ? ({
+      headers: { "Proxy-Authorization": proxyAuthorizationHeader },
+    } as HttpsProxyAgentOptions<string>)
+  : undefined;
+
 const httpsProxyAgent = new HttpsProxyAgent(
-  `${proxyProtocol}://${proxyHost}:${proxyPort}`
+  `${proxyProtocol}://${proxyHost}:${proxyPort}`,
+  proxyAgentOptions
 );
 
 const httpsAgentProperty = extend(
@@ -51,6 +60,7 @@ const httpsAgentProperty = extend(
 );
 
 const authenticator = new IamAuthenticator({
+  url: iamUrl,
   ...httpsAgentProperty,
   apikey,
   disableSslVerification: true,
